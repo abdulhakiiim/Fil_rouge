@@ -23,17 +23,17 @@ class AppFixtures extends Fixture
     {
         //Hydratation du role admin_system
         $roleAdminSystem = new Role();
-            $roleAdminSystem->setLibelle("ROLE_ADMIN_SYSTEM");
+            $roleAdminSystem->setLibelle("ADMIN_SYSTEM");
             $manager->persist($roleAdminSystem);
 
         //Hydratation du role admin
         $roleAdmin = new Role();
-            $roleAdmin->setLibelle("ROLE_ADMIN");
+            $roleAdmin->setLibelle("ADMIN");
             $manager->persist($roleAdmin);
 
         //Hydratation du role caissier
         $roleCaissier = new Role();
-            $roleCaissier->setLibelle("ROLE_CAISSIER");
+            $roleCaissier->setLibelle("CAISSIER");
             $manager->persist($roleCaissier);    
             
         //Hydratation de la table role côté db
@@ -41,14 +41,14 @@ class AppFixtures extends Fixture
         $this->addReference('Admin' , $roleAdmin);
         $this->addReference('Caissier' , $roleCaissier);
 
-
+        $roleSupadmin= $this->getReference('Admin_System');
         $user = new User();
         $user->setEmail("admin_system@tawfeex.sn")
              ->setNomComplet("Abdul Hakiim")
              ->setPassword($this->encoder->encodePassword($user, "Admin_System"))
-             ->setRoles(json_encode(array("ROLE_ADMIN_SYSTEM, ROLE_ADMIN, ROLE_CAISSIER")))
+             ->setRoles((array("ROLE_".$roleSupadmin->getLibelle())))
              ->setRole($roleAdminSystem)
-             ->setIsActif("1");
+             ->setIsActif(true);
         $manager->persist($user);
 
         $manager->flush();

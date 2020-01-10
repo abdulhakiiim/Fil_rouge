@@ -3,9 +3,57 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 
 /**
+ *  @ApiResource(
+ *  collectionOperations={
+ *          "get"={"security"="is_granted('ROLE_ADMIN')",
+ *           "security_message"="Acces refuse. Seul Admin System ou Admin peut lister les elements d'une ressource",
+ *            "normalisation_context"={"groups"={"get"}},
+ *         },
+ *          "createAdmin"={
+ *          "method"="POST",
+ *          "path"="/users/admin/new",
+ *              "security"="is_granted('ROLE_ADMIN_SYSTEM')", 
+ *              "security_message"="Acces refuse. Seul Admin System peut creer un Admin "
+ *                 },
+ *          "createCaissier"={
+ *          "method"="POST",
+ *          "path"="/users/caissier/new",
+ *              "security"="is_granted('ROLE_ADMIN')", 
+ *              "security_message"="Acces refuse. Seul Admin System ou Admin peut creer un  Caissier"
+ *                 }
+ *             },
+ *  itemOperations={
+ *          "get"={"security"="is_granted('ROLE_ADMIN')",
+ *          "security_message"="Acces refuse. Seul Admin System ou Admin peut lister un element d'une ressource",
+ *           "normalisation_context"={"groups"={"get"}}
+ *              },
+ *          "blockedAdmin"={
+ *          "method"="PUT",
+ *          "path"="/users/admin/{id}",
+ *              "security"="is_granted('ROLE_ADMIN_SYSTEM')",
+ *              "security_message"="Acces refuse. Seul Admin System peut bloquer un Admin "
+ *                   },
+ *          "blockedCaissier"={
+ *          "method"="PUT",
+ *          "path"="/users/caissier/{id}",
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="Acces refuse. Seul Admin System ou Admin peut bloquer un Caissier"
+ *                   },
+ *          "delete"={"security"="is_granted('ROLE_ADMIN_SYSTEM')",
+ *          "security_message"="Acces Refuse. Seul le Super Admin peut supprimer un User"    
+ *               }
+ *     } 
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
@@ -79,14 +127,12 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRoles()
     {
-        //mise en relation du role généré par symfony avec l'attribut role de l'entité Role
-        $roles = [$this->roles->getRole()];
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+       
+        $roles = $this->roles;
 
-        return array_unique($roles);
+        return $roles;
     }
 
     public function setRoles($roles): self
