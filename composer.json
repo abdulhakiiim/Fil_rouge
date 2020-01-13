@@ -8,6 +8,8 @@
         "api-platform/api-pack": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "easycorp/easyadmin-bundle": "^2.3",
+        "laminas/laminas-code": "^3.4",
+        "laminas/laminas-eventmanager": "^3.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
