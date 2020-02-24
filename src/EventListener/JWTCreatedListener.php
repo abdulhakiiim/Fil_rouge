@@ -6,7 +6,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 
 class JWTCreatedListener
-{
+{   
 
     /**
      * @var RequestStack
@@ -30,7 +30,7 @@ class JWTCreatedListener
     {
         /** @var $user \AppBundle\Entity\User */
         $user = $event->getUser();
-        if (!$user->getIsActif()){
+        if (!$user->getIsActive()){
             throw new  DisabledException('User account is disabled.');
            
         }

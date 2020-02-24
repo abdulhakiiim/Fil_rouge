@@ -8,6 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+
 class AppFixtures extends Fixture
 {
     
@@ -34,21 +35,30 @@ class AppFixtures extends Fixture
         //Hydratation du role caissier
         $roleCaissier = new Role();
             $roleCaissier->setLibelle("CAISSIER");
-            $manager->persist($roleCaissier);    
+            $manager->persist($roleCaissier);   
+            
+        //Hydratation du role partenaire
+        $rolePatner = new Role();
+            $rolePatner->setLibelle("PARTENAIRE");
+            $manager->persist($rolePatner); 
             
         //Hydratation de la table role côté db
         $this->addReference('Admin_System' , $roleAdminSystem);
         $this->addReference('Admin' , $roleAdmin);
         $this->addReference('Caissier' , $roleCaissier);
+        $this->addReference('Patner' , $rolePatner );
 
+        //Récupération du role admin_system
         $roleSupadmin= $this->getReference('Admin_System');
+
+        //Créeation user admin_system
         $user = new User();
         $user->setEmail("admin_system@tawfeex.sn")
              ->setNomComplet("Abdul Hakiim")
              ->setPassword($this->encoder->encodePassword($user, "Admin_System"))
              ->setRoles((array("ROLE_".$roleSupadmin->getLibelle())))
              ->setRole($roleAdminSystem)
-             ->setIsActif(true);
+             ->setIsActive(true);
         $manager->persist($user);
 
         $manager->flush();
