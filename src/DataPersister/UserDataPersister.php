@@ -24,12 +24,19 @@ class UserDataPersister implements DataPersisterInterface
     }
     public function persist($data)
     {
-        $data->setPassword($this->userPasswordEncoder->encodePassword($data, $data->getPassword()))
-             ->setRoles(["ROLE_".$data->getRole()->getLibelle()]);
+        //Encodage mot de passe hydratation Roles et Status que si c'est un nouveau user
+        if($data->getId() ==null){
+
+        $data->setPassword($this->userPasswordEncoder->encodePassword($data, $data->getPassword()));    
+        $data->setRoles(["ROLE_".$data->getRole()->getLibelle()]);
+        $data->setIsActive(true);
+        }
+
         $data->eraseCredentials();
-        
+
         $this->entityManager->persist($data);
         $this->entityManager->flush();
+        
     }
     public function remove($data)
     {

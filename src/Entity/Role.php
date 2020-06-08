@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use App\Controller\RoleController;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={
+ *                            "get"={
+ *                               "method"="GET",
+ *                               "security"="is_granted('ROLE_ADMIN')",
+ *                               "controller"=RoleController::class}})
  * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
  */
 class Role

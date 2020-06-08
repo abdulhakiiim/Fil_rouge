@@ -25,10 +25,9 @@ class CompteController
     {
         //Encodage password et hydratation du ROLE pour un nouveau partenaire 
         if ($data->getPartObject()->getId() ==null){
-
             $data->getPartObject()->getPartUsers()[0]->setPassword($this->userPasswordEncoder
                  ->encodePassword($data->getPartObject()->getPartUsers()[0], $data->getPartObject()->getPartUsers()[0]->getPassword()));
-            
+
             $rolepart=$this->roleRepo->findByRolePart('PARTENAIRE');
             $data->getPartObject()->getPartUsers()[0]->setRole($rolepart[0]);
 

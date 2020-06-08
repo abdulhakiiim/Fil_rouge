@@ -30,9 +30,10 @@ class JWTCreatedListener
     {
         /** @var $user \AppBundle\Entity\User */
         $user = $event->getUser();
+
+        //Contrôle blockage user 
         if (!$user->getIsActive()){
             throw new  DisabledException('User account is disabled.');
-           
         }
         // merge with existing event data
         $payload = array_merge(

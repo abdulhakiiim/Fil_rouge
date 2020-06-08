@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Controller\UserListController;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\EventListener\ControlUserSubscriber;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,7 +16,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  *  @ApiResource(
- *      collectionOperations={"get", "post"},
+ *      collectionOperations={"get"={
+ *                               "method"="GET",
+ *                               "controller"=UserListController::class}, 
+ *                            "post"},
  *      itemOperations={"get", "put", "delete"})
  * 
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -36,7 +40,7 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @Groups("read")
+     * @Groups({"read" , "write"})
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -61,7 +65,7 @@ class User implements UserInterface
     private $isActive;
 
     /**
-     * @Groups("write")
+     * @Groups({"read" , "write"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="user")
      * @ORM\JoinColumn(nullable=false)
      */
